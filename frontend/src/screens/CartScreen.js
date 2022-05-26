@@ -12,7 +12,6 @@ import {
 } from 'react-bootstrap';
 
 import Message from '../Components/Message';
-import Loader from '../Components/Loader';
 
 import { addToCart, removeFormCart } from '../actions/cartActions';
 
@@ -40,7 +39,6 @@ const CartScreen = () => {
   };
 
   const checkoutHandler = () => {
-    // console.log('checkout');
     navigate(`/login?redirect=shipping`);
   };
 
