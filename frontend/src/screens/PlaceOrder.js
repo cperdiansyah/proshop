@@ -15,11 +15,12 @@ const PlaceOrder = () => {
   const cart = useSelector((state) => state.cart);
   const { cartItems, shippingAddress, paymentMethod } = cart;
 
+
+  //   Calculate items
   const addDecimal = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2);
   };
 
-  //   Calculate items
   cart.itemsPrice = addDecimal(
     cart.cartItems.reduce((a, c) => a + c.price * c.qty, 0)
   );
