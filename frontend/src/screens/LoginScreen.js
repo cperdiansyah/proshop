@@ -21,7 +21,7 @@ const LoginScreen = () => {
   const { loading, error, userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && userInfo.name) {
       navigate(`/${redirect}`);
     }
   }, [navigate, userInfo, redirect]);
