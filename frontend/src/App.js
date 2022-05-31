@@ -29,6 +29,7 @@ function App() {
         <Container>
           <Routes>
             <Route path='/' element={<HomeScreens />} />
+            <Route path='/search/:keyword' element={<HomeScreens />} />
             <Route path='/order/:id' element={<OrderScreen />} />
             <Route path='/shipping' element={<ShippingScreen />} />
             <Route path='/payment' element={<PaymentScreen />} />
