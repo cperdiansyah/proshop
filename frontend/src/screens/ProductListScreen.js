@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Table, Button, Row, Col } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Message from '../Components/Message';
 import Loader from '../Components/Loader';
+import Paginate from '../Components/Paginate';
 import {
   listProducts,
   deleteProduct,
@@ -16,11 +17,13 @@ import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 
 const ProductListScreen = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
+  const params = useParams();
+
+  const pageNumber = params.pageNumber || 1;
 
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products, pages, page } = productList;
 
   const productDelete = useSelector((state) => state.productDelete);
   const {
@@ -50,7 +53,7 @@ const ProductListScreen = () => {
     if (successCreate) {
       navigate(`/admin/products/${createdProduct._id}/edit`);
     } else {
-      dispatch(listProducts());
+      dispatch(listProducts('', pageNumber));
     }
   }, [
     dispatch,
@@ -59,6 +62,7 @@ const ProductListScreen = () => {
     successDelete,
     successCreate,
     createdProduct,
+    pageNumber,
   ]);
 
   const deleteHandler = (id) => {
@@ -100,20 +104,21 @@ const ProductListScreen = () => {
         error && <Message variant='danger'>{error}</Message>
       )}
 
-      {!loading && products && (
-        <Table striped bordered hover responsive className='table-sm'>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>PRICE</th>
-              <th>CATEGORY</th>
-              <th>BRAND</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
+      <Table striped bordered hover responsive className='table-sm'>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>PRICE</th>
+            <th>CATEGORY</th>
+            <th>BRAND</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {!loading &&
+            products &&
+            products.map((product) => (
               <tr key={product._id}>
                 <td>{product._id}</td>
                 <td>{product.name}</td>
@@ -136,9 +141,9 @@ const ProductListScreen = () => {
                 </td>
               </tr>
             ))}
-          </tbody>
-        </Table>
-      )}
+        </tbody>
+      </Table>
+      <Paginate pages={pages} page={page} isAdmin />
     </>
   );
 };
